@@ -1,4 +1,4 @@
-@extends('student_infos.layout')
+@extends('layouts.app')
 @section('content')
     <div class="container">
         <h1>Student Infos</h1>
@@ -24,8 +24,9 @@
                 serverSide: true,
                 ajax: "{{ route('student-infos.index') }}",
                 columns: [{
-                        data: 'id',
-                        name: 'id'
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false, searchable: false
                     },
                     {
                         data: 'title',

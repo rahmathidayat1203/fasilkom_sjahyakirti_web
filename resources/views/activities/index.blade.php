@@ -1,5 +1,4 @@
-@extends('activities.layout')
-
+@extends('layouts.app')
 @section('content')
     <div class="container">
         <h1>Activities</h1>
@@ -25,8 +24,9 @@
                     serverSide: true,
                     ajax: "{{ route('activities.index') }}",
                     columns: [{
-                            data: 'id',
-                            name: 'id'
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex',
+                            orderable: false, searchable: false
                         },
                         {
                             data: 'title',

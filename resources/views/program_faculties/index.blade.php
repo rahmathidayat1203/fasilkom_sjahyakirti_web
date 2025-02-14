@@ -1,5 +1,4 @@
-@extends('program_faculties.layout')
-
+@extends('layouts.app')
 @section('content')
 <div class="container">
     <h1>Program Faculties</h1>
@@ -24,7 +23,7 @@
             serverSide: true,
             ajax: "{{ route('program_faculties.index') }}",
             columns: [
-                { data: 'id', name: 'id' },
+                { data: 'DT_RowIndex', name: 'DT_RowIndex',orderable: false, searchable: false },
                 { data: 'program', name: 'program.name' },
                 { data: 'faculty', name: 'faculty.name' },
                 { data: 'action', name: 'action', orderable: false, searchable: false }

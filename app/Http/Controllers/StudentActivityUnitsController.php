@@ -24,7 +24,7 @@ class StudentActivityUnitsController extends Controller
                 })
                 ->editColumn('image', function ($row) {
                     return '<img src="' . Storage::url($row->image) . '" width="100" />';
-                })
+                })->addIndexColumn()
                 ->rawColumns(['action', 'image'])
                 ->make(true);
         }

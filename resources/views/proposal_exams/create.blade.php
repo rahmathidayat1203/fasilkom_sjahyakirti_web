@@ -1,4 +1,4 @@
-@extends('proposal_exams.layout')
+@extends('layouts.app')
 @section('content')
     <div class="container">
         <h1>Create Proposal Exam</h1>

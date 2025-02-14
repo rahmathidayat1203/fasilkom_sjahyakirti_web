@@ -22,7 +22,7 @@ class ProposalExamsController extends Controller
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                               </form>';
                     return $btn;
-                })
+                })->addIndexColumn()
                 ->rawColumns(['action'])
                 ->make(true);
         }

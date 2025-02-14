@@ -1,4 +1,4 @@
-@extends('student_activity_units.layout')
+@extends('layouts.app')
 @section('content')
     <div class="container">
         <h1>Edit Student Activity Unit</h1>

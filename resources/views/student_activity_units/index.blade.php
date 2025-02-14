@@ -1,5 +1,4 @@
-@extends('student_activity_units.layout')
-
+@extends('layouts.app')
 @section('content')
     <div class="container">
         <h1>Student Activity Units</h1>
@@ -24,8 +23,9 @@
                 serverSide: true,
                 ajax: "{{ route('student_activity_units.index') }}",
                 columns: [{
-                        data: 'id',
-                        name: 'id'
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false, searchable: false
                     },
                     {
                         data: 'image',

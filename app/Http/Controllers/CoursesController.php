@@ -24,7 +24,7 @@ class CoursesController extends Controller
                 })
                 ->addColumn('program', function ($row) {
                     return $row->program->name; // Menampilkan nama program
-                })
+                })->addIndexColumn()
                 ->rawColumns(['action'])
                 ->make(true);
         }

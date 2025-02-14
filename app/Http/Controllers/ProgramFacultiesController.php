@@ -28,7 +28,7 @@ class ProgramFacultiesController extends Controller
                 })
                 ->addColumn('faculty', function ($row) {
                     return $row->faculty->name; // Menampilkan nama fakultas
-                })
+                })->addIndexColumn()
                 ->rawColumns(['action'])
                 ->make(true);
         }

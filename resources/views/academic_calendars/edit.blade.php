@@ -1,4 +1,4 @@
-@extends('academic_calendars.layout')
+@extends('layouts.app')
 @section('content')
 <div class="container">
     <h1>Edit Academic Calendar</h1>

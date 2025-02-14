@@ -21,7 +21,7 @@ class ProgramsController extends Controller
                                 ' . method_field("DELETE") . '
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                             </form>';
-                })
+                })->addIndexColumn()
                 ->make(true);
         }
 

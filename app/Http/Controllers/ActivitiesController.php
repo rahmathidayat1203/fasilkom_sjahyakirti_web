@@ -23,7 +23,7 @@ class ActivitiesController extends Controller
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                               </form>';
                     return $btn;
-                })
+                })->addIndexColumn()
                 ->make(true);
         }
 

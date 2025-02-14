@@ -1,5 +1,4 @@
-@extends('programs.layout')
-
+@extends('layouts.app')
 @section('content')
     <div class="container">
         <h1>Programs</h1>
@@ -31,8 +30,9 @@
                 serverSide: true,
                 ajax: "{{ route('programs.index') }}",
                 columns: [{
-                        data: 'id',
-                        name: 'id'
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false, searchable: false
                     },
                     {
                         data: 'name',
