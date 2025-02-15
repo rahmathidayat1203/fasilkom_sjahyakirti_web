@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AcademicCalendars;
+use App\Models\Semester; // Jika Anda memiliki model Semester
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -20,7 +21,11 @@ class AcademicCalendarsController extends Controller
                                 ' . method_field("DELETE") . '
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                             </form>';
-                })->addIndexColumn()
+                })
+                ->addColumn('semester', function ($row) {
+                    return $row->semester->name; // Mengasumsikan ada relasi ke model Semester
+                })
+                ->addIndexColumn()
                 ->make(true);
         }
 
@@ -29,15 +34,19 @@ class AcademicCalendarsController extends Controller
 
     public function create()
     {
-        return view('academic_calendars.create');
+        $semesters = Semester::all(); // Mengambil semua semester untuk dropdown
+        return view('academic_calendars.create', compact('semesters'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'semester' => 'required',
-            'date' => 'required',
-            'description' => 'required',
+            'semester_id' => 'required|exists:semesters,id',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'type' => 'required|in:Akademik,Non-Akademik,Wisuda',
         ]);
 
         AcademicCalendars::create($request->all());
@@ -46,15 +55,19 @@ class AcademicCalendarsController extends Controller
 
     public function edit(AcademicCalendars $academicCalendar)
     {
-        return view('academic_calendars.edit', compact('academicCalendar'));
+        $semesters = Semester::all(); // Mengambil semua semester untuk dropdown
+        return view('academic_calendars.edit', compact('academicCalendar', 'semesters'));
     }
 
     public function update(Request $request, AcademicCalendars $academicCalendar)
     {
         $request->validate([
-            'semester' => 'required',
-            'date' => 'required',
-            'description' => 'required',
+            'semester_id' => 'required|exists:semesters,id',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'type' => 'required|in:Akademik,Non-Akademik,Wisuda',
         ]);
 
         $academicCalendar->update($request->all());

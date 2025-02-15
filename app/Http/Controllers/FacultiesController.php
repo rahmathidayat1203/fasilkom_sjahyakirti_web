@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Faculties;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 
 class FacultiesController extends Controller
@@ -35,24 +36,31 @@ class FacultiesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'welcome_message' => 'required',
-            'history' => 'required',
-            'structure_image' => 'required|image',
-            'vision' => 'required',
-            'mission' => 'required',
-            'goals' => 'required',
-            'objectives' => 'required',
-            'dean_photo' => 'required|image',
-            'dean_message' => 'required',
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:faculties',
+            'welcome_message' => 'required|string',
+            'history' => 'required|string',
+            'structure_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'vision' => 'required|string',
+            'mission' => 'required|string',
+            'goals' => 'required|string',
+            'objectives' => 'required|string',
+            'dean_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'dean_message' => 'required|string',
+            'created_by' => 'required',
         ]);
 
         $data = $request->all();
-        $data['structure_image'] = $request->file('structure_image')->store('images', 'public');
-        $data['dean_photo'] = $request->file('dean_photo')->store('images', 'public');
+
+        if ($request->hasFile('structure_image')) {
+            $data['structure_image'] = $request->file('structure_image')->store('images', 'public');
+        }
+
+        if ($request->hasFile('dean_photo')) {
+            $data['dean_photo'] = $request->file('dean_photo')->store('images', 'public');
+        }
 
         Faculties::create($data);
-
         return redirect()->route('faculties.index')->with('success', 'Faculty created successfully.');
     }
 
@@ -64,33 +72,48 @@ class FacultiesController extends Controller
     public function update(Request $request, Faculties $faculty)
     {
         $request->validate([
-            'name' => 'required',
-            'welcome_message' => 'required',
-            'history' => 'required',
-            'structure_image' => 'image',
-            'vision' => 'required',
-            'mission' => 'required',
-            'goals' => 'required',
-            'objectives' => 'required',
-            'dean_photo' => 'image',
-            'dean_message' => 'required',
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:faculties,slug,' . $faculty->id,
+            'welcome_message' => 'required|string',
+            'history' => 'required|string',
+            'structure_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'vision' => 'required|string',
+            'mission' => 'required|string',
+            'goals' => 'required|string',
+            'objectives' => 'required|string',
+            'dean_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'dean_message' => 'required|string',
+            'created_by' => 'required',
         ]);
 
         $data = $request->all();
+
         if ($request->hasFile('structure_image')) {
+            if ($faculty->structure_image) {
+                Storage::disk('public')->delete($faculty->structure_image);
+            }
             $data['structure_image'] = $request->file('structure_image')->store('images', 'public');
         }
+
         if ($request->hasFile('dean_photo')) {
+            if ($faculty->dean_photo) {
+                Storage::disk('public')->delete($faculty->dean_photo);
+            }
             $data['dean_photo'] = $request->file('dean_photo')->store('images', 'public');
         }
 
         $faculty->update($data);
-
         return redirect()->route('faculties.index')->with('success', 'Faculty updated successfully.');
     }
 
     public function destroy(Faculties $faculty)
     {
+        if ($faculty->structure_image) {
+            Storage::disk('public')->delete($faculty->structure_image);
+        }
+        if ($faculty->dean_photo) {
+            Storage::disk('public')->delete($faculty->dean_photo);
+        }
         $faculty->delete();
         return redirect()->route('faculties.index')->with('success', 'Faculty deleted successfully.');
     }

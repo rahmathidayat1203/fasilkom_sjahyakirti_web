@@ -8,47 +8,50 @@
                 <tr>
                     <th>ID</th>
                     <th>Title</th>
-                    <th>Description</th>
-                    <th>Details</th>
+                    <th>Excerpt</th>
+                    <th>Priority</th>
+                    <th>Created By</th>
                     <th>Action</th>
                 </tr>
             </thead>
         </table>
     </div>
-
-    @push('scripts')
-        <script>
-            $(function() {
-                $('#bulletinsTable').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: "{{ route('bulletins.index') }}",
-                    columns: [{
-                            data: 'DT_RowIndex',
-                            name: 'DT_RowIndex',
-                            orderable: false, searchable: false
-                        },
-                        {
-                            data: 'title',
-                            name: 'title'
-                        },
-                        {
-                            data: 'description',
-                            name: 'description'
-                        },
-                        {
-                            data: 'details',
-                            name: 'details'
-                        },
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false,
-                            searchable: false
-                        }
-                    ]
-                });
-            });
-        </script>
-    @endpush
 @endsection
+@push('scripts')
+    <script>
+        $(function() {
+            $('#bulletinsTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('bulletins.index') }}",
+                columns: [{
+                        data: 'id',
+                        name: 'id'
+                    },
+                    {
+                        data: 'title',
+                        name: 'title'
+                    },
+                    {
+                        data: 'excerpt',
+                        name: 'excerpt'
+                    },
+                    {
+                        data: 'priority',
+                        name: 'priority'
+                    },
+                    {
+                        data: 'created_by',
+                        name: 'created_by'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ]
+            });
+        });
+    </script>
+@endpush

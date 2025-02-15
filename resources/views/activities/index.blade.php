@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
     <div class="container">
         <h1>Activities</h1>
@@ -8,50 +9,38 @@
                 <tr>
                     <th>ID</th>
                     <th>Title</th>
+                    <th>Slug</th>
                     <th>Description</th>
-                    <th>Image</th>
+                    <th>Category</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Created By</th>
                     <th>Action</th>
                 </tr>
             </thead>
         </table>
     </div>
-
-    @push('scripts')
-        <script>
-            $(document).ready(function() {
-                $('#activitiesTable').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: "{{ route('activities.index') }}",
-                    columns: [{
-                            data: 'DT_RowIndex',
-                            name: 'DT_RowIndex',
-                            orderable: false, searchable: false
-                        },
-                        {
-                            data: 'title',
-                            name: 'title'
-                        },
-                        {
-                            data: 'description',
-                            name: 'description'
-                        },
-                        {
-                            data: 'image',
-                            name: 'image',
-                            render: function(data) {
-                                return '<img src="/storage/images/' + data + '" width="100" />';
-                            }
-                        },
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false,
-                            searchable: false
-                        }
-                    ]
-                });
-            });
-        </script>
-    @endpush
 @endsection
+
+@push('scripts')
+    <script>
+        $(function() {
+            $('#activitiesTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('activities.index') }}",
+                columns: [
+                    { data: 'id', name: 'id' },
+                    { data: 'title', name: 'title' },
+                    { data: 'slug', name: 'slug' },
+                    { data: 'description', name: 'description' },
+                    { data: 'category', name: 'category' },
+                    { data: 'start_date', name: 'start_date' },
+                    { data: 'end_date', name: 'end_date' },
+                    { data: 'created_by', name: 'created_by' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false }
+                ]
+            });
+        });
+    </script>
+@endpush

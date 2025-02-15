@@ -68,6 +68,18 @@ use App\Http\Controllers\StudentInfosController;
 
 Route::resource('student-infos', StudentInfosController::class);
 
+use App\Http\Controllers\SemesterController;
+
+Route::resource('semesters', SemesterController::class);
+
+use App\Http\Controllers\AdmissionController;
+
+Route::resource('admissions', AdmissionController::class);
+
+use App\Http\Controllers\LecturerController;
+
+Route::resource('lecturers', LecturerController::class);
+
 
 Route::get('/', function () {
     return view('welcome');

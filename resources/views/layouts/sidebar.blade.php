@@ -90,6 +90,30 @@
                         <span class="hide-menu">Proposal Exams</span>
                     </a>
                 </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{{ route('semesters.index') }}">
+                        <span class="d-flex align-items-center">
+                            <i class="ti ti-calendar-time fs-6"></i>
+                        </span>
+                        <span class="hide-menu">Semesters</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{{ route('admissions.index') }}">
+                        <span class="d-flex align-items-center">
+                            <i class="fas fa-user-graduate"></i>
+                        </span>
+                        <span class="hide-menu">Admissions</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{{ route('lecturers.index') }}">
+                        <span class="d-flex align-items-center">
+                            <i class="fas fa-user-graduate"></i>
+                        </span>
+                        <span class="hide-menu">Lecturers</span>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

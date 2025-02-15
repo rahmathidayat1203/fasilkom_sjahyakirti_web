@@ -14,16 +14,20 @@ return new class extends Migration
         Schema::create('faculties', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('welcome_message');
-            $table->string('history');
-            $table->string('structure_image');
-            $table->string('vision');
-            $table->string('mission');
-            $table->string('goals');
-            $table->string('objectives');
-            $table->string('dean_photo');
-            $table->string('dean_message');
+            $table->string('slug')->unique(); // Untuk SEO-friendly URL
+            $table->text('welcome_message');
+            $table->text('history');
+            $table->string('structure_image')->nullable();
+            $table->text('vision');
+            $table->text('mission');
+            $table->text('goals');
+            $table->text('objectives');
+            $table->string('dean_photo')->nullable();
+            $table->text('dean_message');
+            $table->unsignedBigInteger('created_by');
             $table->timestamps();
+            $table->softDeletes();
+            $table->index(['name', 'slug']);
         });
     }
 

@@ -14,9 +14,14 @@ return new class extends Migration
         Schema::create('bulletins', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('description');
-            $table->string('details');
+            $table->string('slug')->unique();
+            $table->text('excerpt'); // Ringkasan
+            $table->string('image')->nullable();
+            $table->longText('content'); // Konten lengkap
+            $table->enum('priority', ['normal', 'important', 'urgent']);
+            $table->unsignedBigInteger('created_by');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -7,15 +7,19 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Image</th>
-                    <th>Text</th>
+                    <th>Student</th>
+                    <th>Supervisor</th>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Scheduled Date</th>
+                    <th>Scheduled Time</th>
+                    <th>Room</th>
                     <th>Action</th>
                 </tr>
             </thead>
         </table>
     </div>
 @endsection
-
 
 @push('scripts')
     <script>
@@ -25,20 +29,36 @@
                 serverSide: true,
                 ajax: "{{ route('proposal-exams.index') }}",
                 columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                        orderable: false, searchable: false
+                        data: 'id',
+                        name: 'id'
                     },
                     {
-                        data: 'image',
-                        name: 'image',
-                        render: function(data) {
-                            return '<img src="/storage/' + data + '" width="100" />';
-                        }
+                        data: 'student.name',
+                        name: 'student.name'
                     },
                     {
-                        data: 'text',
-                        name: 'text'
+                        data: 'supervisor.name',
+                        name: 'supervisor.name'
+                    },
+                    {
+                        data: 'title',
+                        name: 'title'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'scheduled_date',
+                        name: 'scheduled_date'
+                    },
+                    {
+                        data: 'scheduled_time',
+                        name: 'scheduled_time'
+                    },
+                    {
+                        data: 'room',
+                        name: 'room'
                     },
                     {
                         data: 'action',

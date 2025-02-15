@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('program_id');
             $table->string('faculty_id');
+            $table->string('created_by');
             $table->timestamps();
         });
     }

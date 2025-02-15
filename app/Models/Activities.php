@@ -10,4 +10,8 @@ class Activities extends Model
     use HasFactory;
     protected  $table = "activities";
     protected $guarded = ['id'];
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+    ];
 }

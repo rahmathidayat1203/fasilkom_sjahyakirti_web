@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
     <div class="container">
         <h1>Class Schedules</h1>
@@ -7,15 +8,20 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Image</th>
-                    <th>Description</th>
-                    <th>Announcement</th>
+                    <th>Course</th>
+                    <th>Lecturer</th>
+                    <th>Day</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Room</th>
+                    <th>Class Type</th>
                     <th>Action</th>
                 </tr>
             </thead>
         </table>
     </div>
 @endsection
+
 @push('scripts')
     <script>
         $(function() {
@@ -24,28 +30,43 @@
                 serverSide: true,
                 ajax: "{{ route('class-schedules.index') }}",
                 columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                        orderable: false, searchable: false
+                        data: 'id',
+                        name: 'id'
                     },
                     {
-                        data: 'image',
-                        name: 'image'
+                        data: 'course.name',
+                        name: 'course.name'
                     },
                     {
-                        data: 'description',
-                        name: 'description'
+                        data: 'lecturer.user.name',
+                        name: 'lecturer.user.name'
                     },
                     {
-                        data: 'announcement',
-                        name: 'announcement'
+                        data: 'day',
+                        name: 'day'
+                    },
+                    {
+                        data: 'start_time',
+                        name: 'start_time'
+                    },
+                    {
+                        data: 'end_time',
+                        name: 'end_time'
+                    },
+                    {
+                        data: 'room',
+                        name: 'room'
+                    },
+                    {
+                        data: 'class_type',
+                        name: 'class_type'
                     },
                     {
                         data: 'action',
                         name: 'action',
                         orderable: false,
                         searchable: false
-                    },
+                    }
                 ]
             });
         });

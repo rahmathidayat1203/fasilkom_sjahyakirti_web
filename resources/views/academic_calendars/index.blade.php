@@ -8,8 +8,10 @@
                 <tr>
                     <th>ID</th>
                     <th>Semester</th>
-                    <th>Date</th>
-                    <th>Description</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Title</th>
+                    <th>Type</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -26,19 +28,28 @@
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
-                        orderable: false, searchable: false
+                        orderable: false,
+                        searchable: false
                     },
                     {
                         data: 'semester',
                         name: 'semester'
                     },
                     {
-                        data: 'date',
-                        name: 'date'
+                        data: 'start_date',
+                        name: 'start_date'
                     },
                     {
-                        data: 'description',
-                        name: 'description'
+                        data: 'end_date',
+                        name: 'end_date'
+                    },
+                    {
+                        data: 'title',
+                        name: 'title'
+                    },
+                    {
+                        data: 'type',
+                        name: 'type'
                     },
                     {
                         data: 'action',

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProposalExams;
+use App\Models\Student;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
@@ -12,7 +14,7 @@ class ProposalExamsController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $proposalExams = ProposalExams::select('*');
+            $proposalExams = ProposalExams::with(['student', 'supervisor'])->select('*');
             return DataTables::of($proposalExams)
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="' . route('proposal-exams.edit', $row->id) . '" class="edit btn btn-primary btn-sm">Edit</a>';
@@ -32,21 +34,41 @@ class ProposalExamsController extends Controller
 
     public function create()
     {
-        return view('proposal_exams.create');
+        $students = Student::all();
+        $supervisors = User::get();
+        return view('proposal_exams.create', compact('students', 'supervisors'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'text' => 'required|string',
+            'student_id' => 'required|exists:users,id',
+            'supervisor_id' => 'required|exists:users,id',
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'document_path' => 'required|file|mimes:pdf|max:2048',
+            'status' => 'required|in:pending,approved,rejected,revised',
+            'feedback' => 'nullable|string',
+            'scheduled_date' => 'nullable|date',
+            'scheduled_time' => 'nullable|date_format:H:i',
+            'room' => 'nullable|string|max:255',
+            'created_by' => 'required',
         ]);
 
-        $imagePath = $request->file('image')->store('images', 'public');
+        $documentPath = $request->file('document_path')->store('documents', 'public');
 
         ProposalExams::create([
-            'image' => $imagePath,
-            'text' => $request->text,
+            'student_id' => $request->student_id,
+            'supervisor_id' => $request->supervisor_id,
+            'title' => $request->title,
+            'description' => $request->description,
+            'document_path' => $documentPath,
+            'status' => $request->status,
+            'feedback' => $request->feedback,
+            'scheduled_date' => $request->scheduled_date,
+            'scheduled_time' => $request->scheduled_time,
+            'room' => $request->room,
+            'created_by' => $request->created_by,
         ]);
 
         return redirect()->route('proposal-exams.index')->with('success', 'Proposal Exam created successfully.');
@@ -61,21 +83,40 @@ class ProposalExamsController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'text' => 'required|string',
+            'student_id' => 'required|exists:users,id',
+            'supervisor_id' => 'required|exists:users,id',
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'document_path' => 'file|mimes:pdf|max:2048',
+            'status' => 'required|in:pending,approved,rejected,revised',
+            'feedback' => 'nullable|string',
+            'scheduled_date' => 'nullable|date',
+            'scheduled_time' => 'nullable|date_format:H:i',
+            'room' => 'nullable|string|max:255',
+            'created_by' => 'required|exists:users,id',
         ]);
 
         $proposalExam = ProposalExams::findOrFail($id);
 
-        if ($request->hasFile('image')) {
-            // Hapus gambar lama jika ada
-            Storage::disk('public')->delete($proposalExam->image);
-            $imagePath = $request->file('image')->store('images', 'public');
-            $proposalExam->image = $imagePath;
+        if ($request->hasFile('document_path')) {
+            // Hapus dokumen lama jika ada
+            Storage::disk('public')->delete($proposalExam->document_path);
+            $documentPath = $request->file('document_path')->store('documents', 'public');
+            $proposalExam->document_path = $documentPath;
         }
 
-        $proposalExam->text = $request->text;
-        $proposalExam->save();
+        $proposalExam->update([
+            'student_id' => $request->student_id,
+            'supervisor_id' => $request->supervisor_id,
+            'title' => $request->title,
+            'description' => $request->description,
+            'status' => $request->status,
+            'feedback' => $request->feedback,
+            'scheduled_date' => $request->scheduled_date,
+            'scheduled_time' => $request->scheduled_time,
+            'room' => $request->room,
+            'created_by' => $request->created_by,
+        ]);
 
         return redirect()->route('proposal-exams.index')->with('success', 'Proposal Exam updated successfully.');
     }
@@ -83,7 +124,7 @@ class ProposalExamsController extends Controller
     public function destroy($id)
     {
         $proposalExam = ProposalExams::findOrFail($id);
-        Storage::disk('public')->delete($proposalExam->image);
+        Storage::disk('public')->delete($proposalExam->document_path);
         $proposalExam->delete();
 
         return redirect()->route('proposal-exams.index')->with('success', 'Proposal Exam deleted successfully.');

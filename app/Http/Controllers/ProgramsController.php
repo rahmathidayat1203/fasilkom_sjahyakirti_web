@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Faculties;
 use App\Models\Programs;
 use Illuminate\Http\Request;
-use App\Models\ProgramFaculties;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 
 class ProgramsController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $programs = Programs::select('*');
+            $programs = Programs::with('faculty')->select('*');
             return DataTables::of($programs)
                 ->addColumn('action', function ($row) {
                     return '<a href="' . route('programs.edit', $row->id) . '" class="btn btn-warning btn-sm">Edit</a>
@@ -21,98 +25,125 @@ class ProgramsController extends Controller
                                 ' . method_field("DELETE") . '
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                             </form>';
-                })->addIndexColumn()
+                })
+                ->addIndexColumn()
                 ->make(true);
         }
 
         return view('programs.index');
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-        return view('programs.create');
+        $faculties = Faculties::all();
+        return view('programs.create',compact('faculties'));
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'banner' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'current_info' => 'required',
-            'vision' => 'required',
-            'mission' => 'required',
-            'goals' => 'required',
-            'objectives' => 'required',
-            'head_welcome_message' => 'required',
-            'head_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'faculty_id' => 'required|exists:faculties,id',
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|unique:programs,slug',
+            'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'current_info' => 'required|string',
+            'vision' => 'required|string',
+            'mission' => 'required|string',
+            'goals' => 'required|string',
+            'objectives' => 'required|string',
+            'head_welcome_message' => 'required|string',
+            'head_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'created_by' => 'required',
         ]);
 
-        $bannerPath = $request->file('banner')->store('banners', 'public');
-        $headPhotoPath = $request->file('head_photo')->store('head_photos', 'public');
-
-        Programs::create([
-            'name' => $request->name,
-            'banner' => $bannerPath,
-            'current_info' => $request->current_info,
-            'vision' => $request->vision,
-            'mission' => $request->mission,
-            'goals' => $request->goals,
-            'objectives' => $request->objectives,
-            'head_welcome_message' => $request->head_welcome_message,
-            'head_photo' => $headPhotoPath,
-        ]);
-
-        return redirect()->route('programs.index')->with('success', 'Program created successfully.');
-    }
-
-    public function edit($id)
-    {
-        $program = Programs::findOrFail($id);
-        return view('programs.edit', compact('program'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'name' => 'required',
-            'banner' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'current_info' => 'required',
-            'vision' => 'required',
-            'mission' => 'required',
-            'goals' => 'required',
-            'objectives' => 'required',
-            'head_welcome_message' => 'required',
-            'head_photo' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        $program = Programs::findOrFail($id);
+        $data = $request->all();
 
         if ($request->hasFile('banner')) {
-            $bannerPath = $request->file('banner')->store('banners', 'public');
-            $program->banner = $bannerPath;
+            $data['banner'] = $request->file('banner')->store('images', 'public');
         }
 
         if ($request->hasFile('head_photo')) {
-            $headPhotoPath = $request->file('head_photo')->store('head_photos', 'public');
-            $program->head_photo = $headPhotoPath;
+            $data['head_photo'] = $request->file('head_photo')->store('images', 'public');
         }
 
-        $program->name = $request->name;
-        $program->current_info = $request->current_info;
-        $program->vision = $request->vision;
-        $program->mission = $request->mission;
-        $program->goals = $request->goals;
-        $program->objectives = $request->objectives;
-        $program->head_welcome_message = $request->head_welcome_message;
+        Programs::create($data);
+        return redirect()->route('programs.index')->with('success', 'Program created successfully.');
+    }
 
-        $program->save();
+    /**
+     * Display the specified resource.
+     */
+    public function show(Programs $program)
+    {
+        return view('programs.show', compact('program'));
+    }
 
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Programs $program)
+    {
+        $faculties = Faculties::all();
+        return view('programs.edit', compact('program','faculties'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Programs $program)
+    {
+        $request->validate([
+            'faculty_id' => 'required|exists:faculties,id',
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|unique:programs,slug,' . $program->id,
+            'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'current_info' => 'required|string',
+            'vision' => 'required|string',
+            'mission' => 'required|string',
+            'goals' => 'required|string',
+            'objectives' => 'required|string',
+            'head_welcome_message' => 'required|string',
+            'head_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'created_by' => 'required',
+        ]);
+
+        $data = $request->all();
+
+        if ($request->hasFile('banner')) {
+            if ($program->banner) {
+                Storage::disk('public')->delete($program->banner);
+            }
+            $data['banner'] = $request->file('banner')->store('images', 'public');
+        }
+
+        if ($request->hasFile('head_photo')) {
+            if ($program->head_photo) {
+                Storage::disk('public')->delete($program->head_photo);
+            }
+            $data['head_photo'] = $request->file('head_photo')->store('images', 'public');
+        }
+
+        $program->update($data);
         return redirect()->route('programs.index')->with('success', 'Program updated successfully.');
     }
 
-    public function destroy($id)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Programs $program)
     {
-        $program = Programs::findOrFail($id);
+        if ($program->banner) {
+            Storage::disk('public')->delete($program->banner);
+        }
+        if ($program->head_photo) {
+            Storage::disk('public')->delete($program->head_photo);
+        }
         $program->delete();
         return redirect()->route('programs.index')->with('success', 'Program deleted successfully.');
     }

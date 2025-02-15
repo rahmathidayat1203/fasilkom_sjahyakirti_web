@@ -13,11 +13,16 @@ return new class extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
-            $table->string('programs_id');
-            $table->string('semester');
-            $table->string('group');
+            $table->unsignedInteger('program_id');
+            $table->enum('semester', ['Ganjil', 'Genap']);
+            $table->string('code')->unique(); // Kode matkul
             $table->string('name');
+            $table->integer('sks'); // Tambahan SKS
+            $table->text('description')->nullable();
+            $table->unsignedInteger('created_by');
             $table->timestamps();
+            $table->softDeletes();
+            $table->index(['code', 'semester']);
         });
     }
 

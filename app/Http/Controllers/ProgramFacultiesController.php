@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Faculties;
 use App\Models\ProgramFaculties;
 use App\Models\Programs;
+use App\Models\Faculties;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -22,20 +22,11 @@ class ProgramFacultiesController extends Controller
                                 ' . method_field("DELETE") . '
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                             </form>';
-                })
-                ->addColumn('program', function ($row) {
-                    return $row->program->name; // Menampilkan nama program
-                })
-                ->addColumn('faculty', function ($row) {
-                    return $row->faculty->name; // Menampilkan nama fakultas
                 })->addIndexColumn()
-                ->rawColumns(['action'])
                 ->make(true);
         }
 
-        $programs = Programs::all();
-        $faculties = Faculties::all();
-        return view('program_faculties.index', compact('programs', 'faculties'));
+        return view('program_faculties.index');
     }
 
     public function create()
@@ -50,35 +41,34 @@ class ProgramFacultiesController extends Controller
         $request->validate([
             'program_id' => 'required|exists:programs,id',
             'faculty_id' => 'required|exists:faculties,id',
+            'created_by' => 'required',
         ]);
 
         ProgramFaculties::create($request->all());
         return redirect()->route('program_faculties.index')->with('success', 'Program Faculty created successfully.');
     }
 
-    public function edit($id)
+    public function edit(ProgramFaculties $programFaculty)
     {
-        $programFaculty = ProgramFaculties::findOrFail($id);
         $programs = Programs::all();
         $faculties = Faculties::all();
         return view('program_faculties.edit', compact('programFaculty', 'programs', 'faculties'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, ProgramFaculties $programFaculty)
     {
         $request->validate([
             'program_id' => 'required|exists:programs,id',
             'faculty_id' => 'required|exists:faculties,id',
+            'created_by' => 'required',
         ]);
 
-        $programFaculty = ProgramFaculties::findOrFail($id);
         $programFaculty->update($request->all());
         return redirect()->route('program_faculties.index')->with('success', 'Program Faculty updated successfully.');
     }
 
-    public function destroy($id)
+    public function destroy(ProgramFaculties $programFaculty)
     {
-        $programFaculty = ProgramFaculties::findOrFail($id);
         $programFaculty->delete();
         return redirect()->route('program_faculties.index')->with('success', 'Program Faculty deleted successfully.');
     }

@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
     <div class="container">
         <h1>Courses</h1>
@@ -8,15 +9,18 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
-                    <th>Semester</th>
-                    <th>Group</th>
                     <th>Program</th>
+                    <th>Semester</th>
+                    <th>Code</th>
+                    <th>SKS</th>
+                    <th>Description</th>
                     <th>Action</th>
                 </tr>
             </thead>
         </table>
     </div>
 @endsection
+
 @push('scripts')
     <script>
         $(function() {
@@ -25,32 +29,39 @@
                 serverSide: true,
                 ajax: "{{ route('courses.index') }}",
                 columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                        orderable: false, searchable: false
+                        data: 'id',
+                        name: 'id'
                     },
                     {
                         data: 'name',
                         name: 'name'
                     },
                     {
+                        data: 'program_name',
+                        name: 'program_name'
+                    }, // Menampilkan nama program
+                    {
                         data: 'semester',
                         name: 'semester'
                     },
                     {
-                        data: 'group',
-                        name: 'group'
+                        data: 'code',
+                        name: 'code'
                     },
                     {
-                        data: 'program',
-                        name: 'program'
-                    }, // Menampilkan nama program
+                        data: 'sks',
+                        name: 'sks'
+                    },
+                    {
+                        data: 'description',
+                        name: 'description'
+                    },
                     {
                         data: 'action',
                         name: 'action',
                         orderable: false,
                         searchable: false
-                    },
+                    }
                 ]
             });
         });

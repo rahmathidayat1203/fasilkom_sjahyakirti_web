@@ -13,9 +13,22 @@ return new class extends Migration
     {
         Schema::create('student_activity_units', function (Blueprint $table) {
             $table->id();
-            $table->string('image');
-            $table->string('procedure');
+            $table->string('name');
+            $table->string('slug')->unique(); // Untuk URL SEO-friendly
+            $table->text('description')->nullable();
+            $table->string('logo')->nullable(); // Logo UKM
+            $table->string('banner')->nullable(); // Banner UKM
+            $table->text('vision')->nullable();
+            $table->text('mission')->nullable();
+            $table->text('goals')->nullable();
+            $table->unsignedBigInteger('head_id'); // Ketua UKM
+            $table->unsignedBigInteger('supervisor_id'); // Dosen pembina
+            $table->unsignedBigInteger('created_by'); // Dibuat oleh (admin/dosen)
             $table->timestamps();
+            $table->softDeletes();
+
+            // Index untuk optimasi query
+            $table->index(['name', 'slug']);
         });
     }
 

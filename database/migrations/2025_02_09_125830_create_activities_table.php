@@ -14,9 +14,15 @@ return new class extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('description');
-            $table->string('image');
+            $table->string('slug')->unique();
+            $table->text('description');
+            $table->string('image')->nullable();
+            $table->enum('category', ['Event', 'Berita', 'Pengumuman', 'Wisuda']);
+            $table->dateTime('start_date');
+            $table->dateTime('end_date')->nullable();
+            $table->unsignedBigInteger('created_by');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

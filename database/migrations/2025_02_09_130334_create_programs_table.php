@@ -13,16 +13,20 @@ return new class extends Migration
     {
         Schema::create('programs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('faculty_id')->constrained(); // Relasi langsung ke faculty
             $table->string('name');
-            $table->string('banner');
-            $table->string('current_info');
-            $table->string('vision');
-            $table->string('mission');
-            $table->string('goals');
-            $table->string('objectives');
-            $table->string('head_welcome_message');
-            $table->string('head_photo');
+            $table->string('slug')->unique();
+            $table->string('banner')->nullable();
+            $table->text('current_info');
+            $table->text('vision');
+            $table->text('mission');
+            $table->text('goals');
+            $table->text('objectives');
+            $table->text('head_welcome_message');
+            $table->string('head_photo')->nullable();
+            $table->unsignedBigInteger('created_by');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

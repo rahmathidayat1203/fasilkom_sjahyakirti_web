@@ -13,10 +13,15 @@ return new class extends Migration
     {
         Schema::create('academic_calendars', function (Blueprint $table) {
             $table->id();
-            $table->string('semester');
-            $table->string('date');
-            $table->string('description');
+            $table->unsignedBigInteger('semester_id'); // Relasi ke tabel semester
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->string('title');
+            $table->text('description');
+            $table->enum('type', ['Akademik', 'Non-Akademik', 'Wisuda']);
+            $table->foreignId('created_by')->constrained('users');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

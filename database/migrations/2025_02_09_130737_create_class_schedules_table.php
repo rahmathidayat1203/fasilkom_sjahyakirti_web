@@ -13,10 +13,16 @@ return new class extends Migration
     {
         Schema::create('class_schedules', function (Blueprint $table) {
             $table->id();
-            $table->string('image');
-            $table->string('description');
-            $table->string('announcement');
+            $table->unsignedBigInteger('course_id'); // Relasi ke mata kuliah
+            $table->unsignedBigInteger('lecturer_id'); // Relasi ke dosen
+            $table->enum('day', ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']); // Hari
+            $table->time('start_time'); // Waktu mulai
+            $table->time('end_time'); // Waktu selesai
+            $table->string('room'); // Ruang kelas
+            $table->enum('class_type', ['theory', 'practice'])->default('theory'); // Tipe kelas (teori/praktikum)
+            $table->unsignedBigInteger('created_by'); // Dibuat oleh (admin/dosen)
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
