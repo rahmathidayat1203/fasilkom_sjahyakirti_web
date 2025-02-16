@@ -14,7 +14,7 @@ class ProposalExamsController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $proposalExams = ProposalExams::with(['student', 'supervisor'])->select('*');
+            $proposalExams = ProposalExams::select('*');
             return DataTables::of($proposalExams)
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="' . route('proposal-exams.edit', $row->id) . '" class="edit btn btn-primary btn-sm">Edit</a>';
@@ -42,32 +42,20 @@ class ProposalExamsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'student_id' => 'required|exists:users,id',
-            'supervisor_id' => 'required|exists:users,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'document_path' => 'required|file|mimes:pdf|max:2048',
-            'status' => 'required|in:pending,approved,rejected,revised',
+            'document_path' => 'required|image|mimes:png,jpeg,jpg|max:2048',
             'feedback' => 'nullable|string',
-            'scheduled_date' => 'nullable|date',
-            'scheduled_time' => 'nullable|date_format:H:i',
-            'room' => 'nullable|string|max:255',
             'created_by' => 'required',
         ]);
 
         $documentPath = $request->file('document_path')->store('documents', 'public');
 
         ProposalExams::create([
-            'student_id' => $request->student_id,
-            'supervisor_id' => $request->supervisor_id,
             'title' => $request->title,
             'description' => $request->description,
             'document_path' => $documentPath,
-            'status' => $request->status,
             'feedback' => $request->feedback,
-            'scheduled_date' => $request->scheduled_date,
-            'scheduled_time' => $request->scheduled_time,
-            'room' => $request->room,
             'created_by' => $request->created_by,
         ]);
 
@@ -83,17 +71,11 @@ class ProposalExamsController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'student_id' => 'required|exists:users,id',
-            'supervisor_id' => 'required|exists:users,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'document_path' => 'file|mimes:pdf|max:2048',
-            'status' => 'required|in:pending,approved,rejected,revised',
+            'document_path' => 'image|mimes:jpg,png,jpeg|max:2048',
             'feedback' => 'nullable|string',
-            'scheduled_date' => 'nullable|date',
-            'scheduled_time' => 'nullable|date_format:H:i',
-            'room' => 'nullable|string|max:255',
-            'created_by' => 'required|exists:users,id',
+            'created_by' => 'required',
         ]);
 
         $proposalExam = ProposalExams::findOrFail($id);
@@ -106,15 +88,9 @@ class ProposalExamsController extends Controller
         }
 
         $proposalExam->update([
-            'student_id' => $request->student_id,
-            'supervisor_id' => $request->supervisor_id,
             'title' => $request->title,
             'description' => $request->description,
-            'status' => $request->status,
             'feedback' => $request->feedback,
-            'scheduled_date' => $request->scheduled_date,
-            'scheduled_time' => $request->scheduled_time,
-            'room' => $request->room,
             'created_by' => $request->created_by,
         ]);
 

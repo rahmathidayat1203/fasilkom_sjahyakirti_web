@@ -20,8 +20,8 @@ class ClassSchedulesController extends Controller
 
             return DataTables::of($classSchedules)
                 ->addColumn('action', function ($row) {
-                    return '<a href="' . route('class_schedules.edit', $row->id) . '" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="' . route('class_schedules.destroy', $row->id) . '" method="POST" style="display:inline;">
+                    return '<a href="' . route('class-schedules.edit', $row->id) . '" class="btn btn-warning btn-sm">Edit</a>
+                            <form action="' . route('class-schedules.destroy', $row->id) . '" method="POST" style="display:inline;">
                                 ' . csrf_field() . '
                                 ' . method_field("DELETE") . '
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
@@ -62,12 +62,12 @@ class ClassSchedulesController extends Controller
         ]);
 
         // Tambahkan created_by (user yang sedang login)
-        $request->merge(['created_by' => auth()->id()]);
+        $request->merge(['created_by' => 1]);
 
         // Simpan data
         ClassSchedules::create($request->all());
 
-        return redirect()->route('class_schedules.index')->with('success', 'Jadwal kelas berhasil ditambahkan.');
+        return redirect()->route('class-schedules.index')->with('success', 'Jadwal kelas berhasil ditambahkan.');
     }
 
     public function edit(ClassSchedules $classSchedule)
@@ -94,7 +94,7 @@ class ClassSchedulesController extends Controller
         // Update data
         $classSchedule->update($request->all());
 
-        return redirect()->route('class_schedules.index')->with('success', 'Jadwal kelas berhasil diperbarui.');
+        return redirect()->route('class-schedules.index')->with('success', 'Jadwal kelas berhasil diperbarui.');
     }
 
     public function destroy(ClassSchedules $classSchedule)
@@ -102,6 +102,6 @@ class ClassSchedulesController extends Controller
         // Hapus data
         $classSchedule->delete();
 
-        return redirect()->route('class_schedules.index')->with('success', 'Jadwal kelas berhasil dihapus.');
+        return redirect()->route('class-schedules.index')->with('success', 'Jadwal kelas berhasil dihapus.');
     }
 }

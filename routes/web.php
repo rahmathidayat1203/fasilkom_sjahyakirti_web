@@ -72,9 +72,9 @@ use App\Http\Controllers\SemesterController;
 
 Route::resource('semesters', SemesterController::class);
 
-use App\Http\Controllers\AdmissionController;
+use App\Http\Controllers\AdmissionsController;
 
-Route::resource('admissions', AdmissionController::class);
+Route::resource('admissions', AdmissionsController::class);
 
 use App\Http\Controllers\LecturerController;
 

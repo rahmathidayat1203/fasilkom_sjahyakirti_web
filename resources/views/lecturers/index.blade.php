@@ -39,8 +39,8 @@
                         name: 'nidn'
                     },
                     {
-                        data: 'user.name',
-                        name: 'user.name'
+                        data: 'user_name',
+                        name: 'user_name'
                     }, // Assuming you have a relationship with User model
                     {
                         data: 'phone',

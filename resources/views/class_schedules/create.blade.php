@@ -2,7 +2,6 @@
 @section('content')
     <div class="container">
         <h1>Create Class Schedule</h1>
-
         <form action="{{ route('class-schedules.store') }}" method="POST">
             @csrf
             <div class="form-group">

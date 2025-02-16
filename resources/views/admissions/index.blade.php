@@ -7,11 +7,10 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>User ID</th>
-                    <th>Program ID</th>
-                    <th>Registration Number</th>
-                    <th>Status</th>
-                    <th>Application Date</th>
+                    <th>Nama Mahasiswa</th>
+                    <th>Email</th>
+                    <th>Status Pendaftaran</th>
+                    <th>Tanggal Pendaftaran</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -25,25 +24,22 @@
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('admissions.index') }}",
-                columns: [{
+                columns: [
+                    {
                         data: 'id',
                         name: 'id'
                     },
                     {
-                        data: 'user_id',
-                        name: 'user_id'
+                        data: 'nama_mhs',
+                        name: 'nama_mhs'
                     },
                     {
-                        data: 'program_id',
-                        name: 'program_id'
+                        data: 'email',
+                        name: 'email'
                     },
                     {
-                        data: 'registration_number',
-                        name: 'registration_number'
-                    },
-                    {
-                        data: 'status',
-                        name: 'status'
+                        data: 'status_pendaftaran',
+                        name: 'status_pendaftaran'
                     },
                     {
                         data: 'created_at',

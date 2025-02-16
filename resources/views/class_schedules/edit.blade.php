@@ -3,7 +3,7 @@
     <div class="container">
         <h1>Edit Class Schedule</h1>
 
-        <form action="{{ route('class_schedules.update', $classSchedule->id) }}" method="POST">
+        <form action="{{ route('class-schedules.update', $classSchedule->id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="form-group">

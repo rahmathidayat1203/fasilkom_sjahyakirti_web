@@ -7,13 +7,11 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Student</th>
-                    <th>Supervisor</th>
                     <th>Title</th>
-                    <th>Status</th>
-                    <th>Scheduled Date</th>
-                    <th>Scheduled Time</th>
-                    <th>Room</th>
+                    <th>Description</th>
+                    <th>Document</th>
+                    <th>Feedback</th>
+                    <th>Created By</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -33,32 +31,28 @@
                         name: 'id'
                     },
                     {
-                        data: 'student.name',
-                        name: 'student.name'
-                    },
-                    {
-                        data: 'supervisor.name',
-                        name: 'supervisor.name'
-                    },
-                    {
                         data: 'title',
                         name: 'title'
                     },
                     {
-                        data: 'status',
-                        name: 'status'
+                        data: 'description',
+                        name: 'description'
                     },
                     {
-                        data: 'scheduled_date',
-                        name: 'scheduled_date'
+                        data: 'document_path',
+                        name: 'document_path',
+                        render: function(data) {
+                            return '<a href="{{ asset('storage') }}/' + data +
+                                '" target="_blank">View Document</a>';
+                        }
                     },
                     {
-                        data: 'scheduled_time',
-                        name: 'scheduled_time'
+                        data: 'feedback',
+                        name: 'feedback'
                     },
                     {
-                        data: 'room',
-                        name: 'room'
+                        data: 'created_by',
+                        name: 'created_by'
                     },
                     {
                         data: 'action',

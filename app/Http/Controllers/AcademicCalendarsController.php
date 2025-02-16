@@ -48,8 +48,10 @@ class AcademicCalendarsController extends Controller
             'description' => 'required|string',
             'type' => 'required|in:Akademik,Non-Akademik,Wisuda',
         ]);
+        $input = $request->all();
+        $input['created_by'] = 1;
 
-        AcademicCalendars::create($request->all());
+        AcademicCalendars::create($input);
         return redirect()->route('academic_calendars.index')->with('success', 'Academic Calendar created successfully.');
     }
 
