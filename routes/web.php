@@ -80,7 +80,5 @@ use App\Http\Controllers\LecturerController;
 
 Route::resource('lecturers', LecturerController::class);
 
-
-Route::get('/', function () {
-    return view('welcome');
-});
+use App\Http\Controllers\Landing\LandingController;
+Route::get('/',[LandingController::class,'index'])->name('landing.index');
